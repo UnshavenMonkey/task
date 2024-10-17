@@ -53,6 +53,7 @@ function getSelectsFromSchema(schema) {
   $('#age_range_description').on('change', function() {
     const selectedAgeRangeDescription = $(this).val();
     updateARDRelativeSelect(selectedAgeRangeDescription, schema)
+    updateSizeClassRelativeSelect($('#size_class').val(), schema)
   });
 
   $('#size_class').on('change', function() {
@@ -106,6 +107,19 @@ function updateSizeClassRelativeSelect(selectedSizeClass, schema) {
       const textIndex = schema.properties.apparel_size.items.properties.size.enum.indexOf(option)
       const text = schema.properties.apparel_size.items.properties.size.enumNames[textIndex]
       $('#size').append(new Option(text, option));
+    });
+  } else if (schema && schema.allOf[1].else.else.else.else.if.properties.apparel_size.items.allOf[0].properties.size_class.enum.includes(selectedSizeClass)) {
+    $('#size').empty();
+    schema.allOf[1].else.else.else.else.then.properties.apparel_size.items.properties.size.enum.forEach((option, index) => {
+      const textIndex = schema.properties.apparel_size.items.properties.size.enum.indexOf(option)
+      const text = schema.properties.apparel_size.items.properties.size.enumNames[textIndex]
+      $('#size').append(new Option(text, option));
+    })
+  } else {
+    $('#size').empty();
+    const sizeOptions = schema.properties.apparel_size.items.properties.size.enum;
+    sizeOptions.forEach((option, index ) => {
+      $('#size').append(new Option(schema.properties.apparel_size.items.properties.size.enumNames[index], option));
     });
   }
 }
