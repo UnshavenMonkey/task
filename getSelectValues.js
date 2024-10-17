@@ -54,6 +54,11 @@ function getSelectsFromSchema(schema) {
     const selectedAgeRangeDescription = $(this).val();
     updateARDRelativeSelect(selectedAgeRangeDescription, schema)
   });
+
+  $('#size_class').on('change', function() {
+    const selectedSizeClass = $(this).val();
+    updateSizeClassRelativeSelect(selectedSizeClass, schema)
+  });
 }
 
 function updateARDRelativeSelect(selectedAgeRangeDescription, schema) {
@@ -90,6 +95,17 @@ function updateARDRelativeSelect(selectedAgeRangeDescription, schema) {
       if (valueSizeClass === option) {
         $('#size_class').val(valueSizeClass);
       }
+    });
+  }
+}
+
+function updateSizeClassRelativeSelect(selectedSizeClass, schema) {
+  if (schema && schema.allOf[1].if.properties.apparel_size.items.allOf[0].properties.size_class.enum.includes(selectedSizeClass)) {
+    $('#size').empty();
+    schema.allOf[1].then.properties.apparel_size.items.properties.size.enum.forEach((option, index) => {
+      const textIndex = schema.properties.apparel_size.items.properties.size.enum.indexOf(option)
+      const text = schema.properties.apparel_size.items.properties.size.enumNames[textIndex]
+      $('#size').append(new Option(text, option));
     });
   }
 }
